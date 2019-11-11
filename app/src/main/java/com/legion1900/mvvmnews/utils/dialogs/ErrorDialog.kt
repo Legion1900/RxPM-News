@@ -1,3 +1,5 @@
+package com.legion1900.mvvmnews.utils.dialogs
+
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
