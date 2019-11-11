@@ -26,16 +26,17 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
-            android:padding="@dimen/small"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/small">
 
             <LinearLayout
                 android:id="@+id/group_pictures"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/tv_label_picasso"
                     style="@style/TextView"
