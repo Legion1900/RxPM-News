@@ -9,8 +9,7 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 
-class ErrorDialog :
-    DialogFragment() {
+class ErrorDialog : DialogFragment() {
 
     companion object {
         const val KEY_MSG = "msg"
