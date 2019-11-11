@@ -1,8 +1,8 @@
-package com.legion1900.mvvmnews
+package com.legion1900.mvvmnews.views
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import com.legion1900.mvvmnews.R
 
 import kotlinx.android.synthetic.main.activity_article.*
 
