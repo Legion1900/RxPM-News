@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.legion1900.mvvmnews.R
 import com.legion1900.mvvmnews.models.data.Article
 
-class NewsAdapter(private val listener: View.OnClickListener, private val context: Context) :
+class NewsAdapter(private val context: Context, private val listener: View.OnClickListener) :
     RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
 
     private val dataSet = ArrayList<Article>()
