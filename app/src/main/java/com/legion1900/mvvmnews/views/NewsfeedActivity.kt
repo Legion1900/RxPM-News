@@ -2,6 +2,7 @@ package com.legion1900.mvvmnews.views
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
@@ -28,8 +29,9 @@ class NewsfeedActivity : AppCompatActivity() {
     private lateinit var rv: RecyclerView
     private val adapter = NewsAdapter(this, View.OnClickListener {
         val i = rv.getChildAdapterPosition(it)
-        model.onArticleClick(i)
         val intent = Intent(this, ArticleActivity::class.java)
+        Log.d("Test", model.news.value?.get(i).toString())
+        intent.putExtra(ArticleActivity.KEY_ARTICLE, model.news.value?.get(i))
         startActivity(intent)
     })
 
