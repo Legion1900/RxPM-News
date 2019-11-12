@@ -2,16 +2,22 @@ package com.legion1900.mvvmnews.models.data
 
 import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity
 data class Article(
-    val author: String?,
-    val title: String?,
-    val publishedAt: String?,
-    val sourceName: String?,
-    val urlToImage: String?,
-    val description: String?
+    @PrimaryKey val id: Int,
+    @ColumnInfo(name = "author") val author: String?,
+    @ColumnInfo(name = "title") val title: String?,
+    @ColumnInfo(name = "published_at") val publishedAt: String?,
+    @ColumnInfo(name = "source") val sourceName: String?,
+    @ColumnInfo(name = "img_url") val urlToImage: String?,
+    @ColumnInfo(name = "description") val description: String?
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -21,6 +27,7 @@ data class Article(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
         parcel.writeString(author)
         parcel.writeString(title)
         parcel.writeString(publishedAt)
