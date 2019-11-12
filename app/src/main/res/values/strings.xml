@@ -14,4 +14,6 @@
     <string name="author">Author: %1s</string>
     <string name="title">Title: %1s</string>
     <string name="source">Source: %1s</string>
+
+    <string name="transition_article">Shared Article</string>
 </resources>

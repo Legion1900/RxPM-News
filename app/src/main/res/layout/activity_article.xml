@@ -31,10 +31,11 @@
             android:orientation="vertical"
             android:padding="@dimen/small">
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/group_pictures"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:transitionName="@string/transition_article"
                 android:orientation="vertical">
 
                 <TextView
@@ -70,7 +71,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
                     tools:src="@drawable/ic_image_grey_24dp" />
-            </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <TextView
                 android:id="@+id/tv_title"

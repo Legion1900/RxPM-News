@@ -1,6 +1,8 @@
 package com.legion1900.mvvmnews.views
 
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,6 +22,7 @@ import com.legion1900.mvvmnews.views.adapters.NewsAdapter
 import com.legion1900.mvvmnews.views.handlers.OnTopicSelectedListener
 import kotlinx.android.synthetic.main.activity_newsfeed.*
 
+
 class NewsfeedActivity : AppCompatActivity() {
 
     private lateinit var model: NewsPresentationModel
@@ -30,9 +33,8 @@ class NewsfeedActivity : AppCompatActivity() {
     private val adapter = NewsAdapter(this, View.OnClickListener {
         val i = rv.getChildAdapterPosition(it)
         val intent = Intent(this, ArticleActivity::class.java)
-        Log.d("Test", model.news.value?.get(i).toString())
         intent.putExtra(ArticleActivity.KEY_ARTICLE, model.news.value?.get(i))
-        startActivity(intent)
+        startActivityTransition(intent, it)
     })
 
     private val errDialog: DialogFragment =
@@ -95,5 +97,17 @@ class NewsfeedActivity : AppCompatActivity() {
     private fun updateContent() {
         val topic = spinner.selectedItem as String
         model.updateNewsfeed(topic)
+    }
+
+    private fun startActivityTransition(intent: Intent, fromView: View) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            val options = ActivityOptions.makeSceneTransitionAnimation(
+                this,
+                fromView,
+                fromView.transitionName
+            ).toBundle()
+            startActivity(intent, options)
+        } else
+            startActivity(intent)
     }
 }
