@@ -9,7 +9,7 @@ import java.util.*
 
 class CachingNewsRepo(
     override val onStartCallback: () -> Unit,
-    onLoaded: (Response) -> Unit,
+    val provideNews: (Response) -> Unit,
     override val onFailureCallback: () -> Unit
 ) : NewsRepository {
 
@@ -20,14 +20,21 @@ class CachingNewsRepo(
         const val TIMEOUT = 60_000
     }
 
-    override val onLoadedCallback: (Response?) -> Unit = {
-        response = it
-        response?.let(onLoaded) ?: onFailureCallback()
+    override val onLoadedCallback: (Response?) -> Unit = { response ->
+        this.response = response
+        response?.let{
+            provideNews(it)
+            topic = requestTopic
+            timestamp = requestDate
+        } ?: onFailureCallback()
     }
 
     private val timeUtils = TimeUtils()
 
     private val executor = AsyncExecutor(onLoadedCallback, onFailureCallback)
+
+    private lateinit var requestTopic: String
+    private lateinit var requestDate: Date
 
     private var topic: String? = null
     private var timestamp: Date? = null
@@ -37,11 +44,11 @@ class CachingNewsRepo(
     override fun loadNews(topic: String) {
         val date = TimeUtils.getCurrentDate()
         if (topic != this.topic || isOutdated(date)) {
-            timestamp = date
-            this.topic = topic
+            this.requestTopic = topic
+            requestDate = date
             startLoading(topic, date)
         } else
-            onLoadedCallback(response)
+            provideNews(response!!)
     }
 
     private fun isOutdated(newDate: Date): Boolean {
