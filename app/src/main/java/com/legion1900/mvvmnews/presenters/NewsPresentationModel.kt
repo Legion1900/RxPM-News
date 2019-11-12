@@ -1,13 +1,11 @@
 package com.legion1900.mvvmnews.presenters
 
 import android.app.Application
-import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.legion1900.mvvmnews.models.data.Article
 import com.legion1900.mvvmnews.models.repository.impl.CachingNewsRepo
-import com.legion1900.mvvmnews.views.ArticleActivity
 
 class NewsPresentationModel(application: Application) : AndroidViewModel(application),
     PresentationModel {
@@ -15,14 +13,19 @@ class NewsPresentationModel(application: Application) : AndroidViewModel(applica
     val news: LiveData<List<Article>>
     val isLoading: LiveData<Boolean>
     val isError: LiveData<Boolean>
+    lateinit var article: Article
+        private set
 
     private val mNews = MutableLiveData<List<Article>>()
     private val mIsLoading = MutableLiveData<Boolean>()
     private val mIsError = MutableLiveData<Boolean>()
 
     private val repo = CachingNewsRepo(
-        onStartCallback = { mIsLoading.value = true },
-        onLoaded = {
+        onStartCallback = {
+            mIsError.value = false
+            mIsLoading.value = true
+        },
+        provideNews = {
             mIsLoading.value = false
             // TODO: temporary solution, implement DB observing
             mNews.value = it.articles
@@ -44,12 +47,9 @@ class NewsPresentationModel(application: Application) : AndroidViewModel(applica
     }
 
     override fun onArticleClick(articleInd: Int) {
-        val app = getApplication<Application>()
-        val intent = Intent(app, ARTICLE_ACTIVITY)
-        app.startActivity(intent)
-    }
-
-    private companion object {
-        val ARTICLE_ACTIVITY = ArticleActivity::class.java
+        /*
+        * At a time click can occur Article list is definitely loaded.
+        * */
+        article = mNews.value?.get(articleInd)!!
     }
 }
