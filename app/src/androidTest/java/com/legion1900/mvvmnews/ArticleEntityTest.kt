@@ -65,11 +65,7 @@ class ArticleEntityTest {
         @BeforeClass
         @JvmStatic
         fun onDbSetup() {
-            val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-            val db =
-                Room.databaseBuilder(appContext, CacheDatabase::class.java, CacheDatabase.DB_NAME)
-                    .build()
-            dao = db.articleDao()
+            dao = DatabaseProvider.provideNewsCacheDb().articleDao()
         }
     }
 }
