@@ -25,17 +25,17 @@
         android:layout_height="wrap_content"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/small">
+            android:padding="@dimen/small"
+            android:transitionName="@string/transition_article">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <LinearLayout
                 android:id="@+id/group_pictures"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:transitionName="@string/transition_article"
                 android:orientation="vertical">
 
                 <TextView
@@ -71,7 +71,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="fitCenter"
                     tools:src="@drawable/ic_image_grey_24dp" />
-            </androidx.appcompat.widget.LinearLayoutCompat>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_title"
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 tools:text="Description:" />
 
-        </LinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </ScrollView>
 
