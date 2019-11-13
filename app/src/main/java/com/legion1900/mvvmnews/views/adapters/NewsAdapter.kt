@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.legion1900.mvvmnews.R
-import com.legion1900.mvvmnews.models.data.entities.Article
+import com.legion1900.mvvmnews.models.data.Article
 
 class NewsAdapter(private val context: Context, private val listener: View.OnClickListener) :
     RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {

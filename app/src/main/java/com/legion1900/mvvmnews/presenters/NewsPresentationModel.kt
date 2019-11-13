@@ -3,7 +3,7 @@ package com.legion1900.mvvmnews.presenters
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.legion1900.mvvmnews.models.data.entities.Article
+import com.legion1900.mvvmnews.models.data.Article
 import com.legion1900.mvvmnews.models.repository.impl.CachingNewsRepo
 
 class NewsPresentationModel : ViewModel(),

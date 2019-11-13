@@ -2,8 +2,8 @@ package com.legion1900.mvvmnews
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.legion1900.mvvmnews.models.data.entities.Article
 import com.legion1900.mvvmnews.models.repository.impl.NewsCache
+import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.BeforeClass
@@ -36,7 +36,7 @@ class NewsCacheTest {
         lateinit var newsCache: NewsCache
 
         @JvmStatic
-        private val articles = mutableListOf<Article>()
+        private val articles = mutableListOf<ArticleEntity>()
 
         @BeforeClass
         @JvmStatic
@@ -48,7 +48,7 @@ class NewsCacheTest {
             val url = "https://example.com"
             val desc = "Foo Bar"
             for (id in 1..20) {
-                articles += Article(id, author, title, pubAt, source, url, desc)
+                articles += ArticleEntity(id, author, title, pubAt, source, url, desc)
             }
         }
 
