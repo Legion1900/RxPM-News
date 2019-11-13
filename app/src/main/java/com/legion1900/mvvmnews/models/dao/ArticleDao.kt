@@ -10,9 +10,12 @@ interface ArticleDao {
     @Insert
     fun insert(vararg articles: Article)
 
-    @Query("DELETE FROM Article WHERE id = :articleId")
-    fun deleteArticles(articleId: Int)
+    @Query("DELETE FROM Article WHERE id IN (:ids)")
+    fun deleteArticles(ids: IntArray)
 
-    @Query("SELECT * FROM Article WHERE id = :ids")
-    fun getArticlesFor(ids: IntRange): List<Article>
+    @Query("SELECT * FROM Article WHERE id IN (:ids)")
+    fun getArticlesFor(ids: IntArray): List<Article>
+
+    @Query("DELETE FROM Article")
+    fun clear()
 }

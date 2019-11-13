@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Article(
-    @PrimaryKey val id: Int,
+    @PrimaryKey var id: Int,
     @ColumnInfo(name = "author") val author: String?,
     @ColumnInfo(name = "title") val title: String?,
     @ColumnInfo(name = "published_at") val publishedAt: String?,
