@@ -1,9 +1,12 @@
 package com.legion1900.mvvmnews
 
+import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.legion1900.mvvmnews.models.repository.impl.NewsCache
+import com.legion1900.mvvmnews.models.room.dao.ArticleDao
+import com.legion1900.mvvmnews.models.room.database.CacheDatabase
 import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
+import com.legion1900.mvvmnews.utils.toIntArray
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.BeforeClass
@@ -11,29 +14,36 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class NewsCacheTest {
+class ArticleEntityTest {
 
     @After
     fun onClearDb() {
-        newsCache.clearCache()
+        dao.clear()
     }
 
     @Test
-    fun writeArticles_test() {
-        newsCache.writeArticles(articles)
+    fun insert_test() {
+        populateTable()
     }
 
     @Test
-    fun readArticles_test() {
-        newsCache.writeArticles(articles)
-        val articles = newsCache.readArticles(1..20)
+    fun getArticlesFor_test() {
+        populateTable()
+        val ids = ARTICLE_RANGE.toIntArray()
+        val articles = dao.getArticlesFor(ids)
         assertEquals("Lists should be the same", Data.articles, articles)
+    }
+
+    private fun populateTable() {
+        dao.insert(*articles.toTypedArray())
     }
 
     private companion object Data {
 
+        val ARTICLE_RANGE = 1..20
+
         @JvmStatic
-        lateinit var newsCache: NewsCache
+        lateinit var dao: ArticleDao
 
         @JvmStatic
         private val articles = mutableListOf<ArticleEntity>()
@@ -56,7 +66,10 @@ class NewsCacheTest {
         @JvmStatic
         fun onDbSetup() {
             val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-            newsCache = NewsCache(appContext)
+            val db =
+                Room.databaseBuilder(appContext, CacheDatabase::class.java, CacheDatabase.DB_NAME)
+                    .build()
+            dao = db.articleDao()
         }
     }
 }
