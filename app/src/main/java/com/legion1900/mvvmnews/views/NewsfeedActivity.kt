@@ -4,7 +4,6 @@ import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.legion1900.mvvmnews.BuildConfig
 import com.legion1900.mvvmnews.R
-import com.legion1900.mvvmnews.models.data.Article
+import com.legion1900.mvvmnews.models.data.entities.Article
 import com.legion1900.mvvmnews.presenters.NewsPresentationModel
 import com.legion1900.mvvmnews.utils.dialogs.ErrorDialog
 import com.legion1900.mvvmnews.views.adapters.NewsAdapter

@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.legion1900.mvvmnews.R
-import com.legion1900.mvvmnews.models.data.Article
+import com.legion1900.mvvmnews.models.data.entities.Article
 import com.squareup.picasso.Picasso
 
 import kotlinx.android.synthetic.main.activity_article.*

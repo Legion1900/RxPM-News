@@ -1,4 +1,4 @@
-package com.legion1900.mvvmnews.models.data
+package com.legion1900.mvvmnews.models.data.entities
 
 import android.os.Parcel
 import android.os.Parcelable
