@@ -1,9 +1,6 @@
 package com.legion1900.mvvmnews.models.room.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.legion1900.mvvmnews.models.room.entity.CacheDataEntity
 import java.util.*
 
@@ -20,6 +17,9 @@ interface CacheDataDao {
 
     @Query("SELECT * FROM CacheData")
     fun getAllData(): List<CacheDataEntity>
+
+    @Query("DELETE FROM CacheData WHERE topic = :topic")
+    fun deleteDataFor(topic: String)
 
     @Query("DELETE FROM CacheData")
     fun clear()

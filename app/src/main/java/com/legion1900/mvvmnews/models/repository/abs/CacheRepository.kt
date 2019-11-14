@@ -1,10 +1,17 @@
 package com.legion1900.mvvmnews.models.repository.abs
 
-import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
+import com.legion1900.mvvmnews.models.data.Article
+import java.util.*
 
 interface CacheRepository {
-    // TODO: change signature to write articles FOR SPECIFIED topic AND date
-    fun writeArticles(articles: List<ArticleEntity>)
-    fun readArticles(ids: IntRange): List<ArticleEntity>
+    fun writeArticles(topic: String, date: Date, articles: List<Article>)
+
+    fun readArticles(topic: String): List<Article>
+
+    /*
+    * Date when specified topic was updated last time.
+    * */
+    fun lastModified(topic: String): Date
+
     fun clearCache()
 }

@@ -45,7 +45,7 @@ object DataProvider {
 
     private fun buildArticle() = Article(AUTHOR, TITLE, PUB_AT, SOURCE, URL, DESC)
 
-    private fun buildArticleList(num: Int): List<Article> {
+    fun buildArticleList(num: Int): List<Article> {
         val list = mutableListOf<Article>()
         for (i in 0 until num)
             list += buildArticle()

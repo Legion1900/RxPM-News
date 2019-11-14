@@ -2,30 +2,38 @@ package com.legion1900.mvvmnews.models.repository.impl
 
 import android.content.Context
 import androidx.room.Room
+import com.legion1900.mvvmnews.models.DataConverter
+import com.legion1900.mvvmnews.models.data.Article
 import com.legion1900.mvvmnews.models.repository.abs.CacheRepository
-import com.legion1900.mvvmnews.models.room.dao.ArticleDao
 import com.legion1900.mvvmnews.models.room.database.CacheDatabase
-import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
-import com.legion1900.mvvmnews.utils.toIntArray
+import com.legion1900.mvvmnews.models.room.entity.CacheDataEntity
+import java.util.*
 
 class NewsCache(appContext: Context) : CacheRepository {
-    private val dao: ArticleDao
 
-    init {
-        val db = Room.databaseBuilder(appContext, CacheDatabase::class.java, CacheDatabase.DB_NAME)
-            .build()
-        dao = db.articleDao()
+    private val db =
+        Room.databaseBuilder(appContext, CacheDatabase::class.java, CacheDatabase.DB_NAME).build()
+    private val articleDao = db.articleDao()
+    private val cacheDao = db.cacheDataDao()
+
+    override fun writeArticles(topic: String, date: Date, articles: List<Article>) {
+        updateCacheData(topic, date)
+        val entities = DataConverter.articlesToEntities(articles, topic)
+        articleDao.insert(*entities.toTypedArray())
     }
 
-    override fun writeArticles(articles: List<ArticleEntity>) {
-        dao.insert(*articles.toTypedArray())
+    private fun updateCacheData(topic: String, date: Date) {
+        cacheDao.deleteDataFor(topic)
+        val cache = CacheDataEntity(topic, date)
+        cacheDao.update(cache)
     }
 
-    override fun readArticles(ids: IntRange): List<ArticleEntity> {
-        TODO("Change interface")
-    }
+    override fun readArticles(topic: String): List<Article> = articleDao.getArticlesFor(topic)
+
+    override fun lastModified(topic: String): Date = cacheDao.getDateFor(topic)
 
     override fun clearCache() {
-        dao.clear()
+        cacheDao.clear()
     }
+
 }
