@@ -34,12 +34,28 @@ data class Article(
     }
 
     companion object CREATOR : Parcelable.Creator<Article> {
+
+        /*
+        * As article`s title, source name and text goes into string delimiter must be really unique.
+        * */
+        private const val DELIMITER = "~_~"
+
         override fun createFromParcel(parcel: Parcel): Article {
             return Article(parcel)
         }
 
         override fun newArray(size: Int): Array<Article?> {
             return arrayOfNulls(size)
+        }
+
+        fun toDbString(article: Article): String = article.run {
+            "$author$DELIMITER$title$DELIMITER$publishedAt$DELIMITER$sourceName$DELIMITER$urlToImage$DELIMITER$description"
+        }
+
+        fun fromString(article: String): Article {
+            // a ~ args
+            val a = article.split(DELIMITER)
+            return Article(a[0], a[1], a[2], a[3], a[4], a[5])
         }
     }
 }
