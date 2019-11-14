@@ -1,9 +1,10 @@
 package com.legion1900.mvvmnews.dao
 
-import com.legion1900.mvvmnews.R
 import com.legion1900.mvvmnews.models.room.dao.CacheDataDao
 import com.legion1900.mvvmnews.models.room.entity.CacheDataEntity
+import com.legion1900.mvvmnews.util.DataProvider.TOPICS
 import com.legion1900.mvvmnews.util.DatabaseProvider
+import org.junit.Assert.assertEquals
 import org.junit.BeforeClass
 import org.junit.Test
 import java.util.*
@@ -17,18 +18,34 @@ class CacheDataEntityTest {
     }
 
     @Test
-    fun getDataFor_test() {
+    fun getCacheFor_test() {
         writeData()
         val out = mutableListOf<CacheDataEntity>()
         for (topic in TOPICS) {
-            out += dao.getDataFor(topic)
+            out += dao.getCacheFor(topic)
         }
 
-        org.junit.Assert.assertEquals(
+        assertEquals(
             "Written and loaded data must be the same",
             data.toSet(),
             out.toSet()
         )
+    }
+
+    @Test
+    fun getDateFor_test() {
+        writeData()
+        val dates = mutableListOf<Date>()
+        for (topic in TOPICS) {
+            dates += dao.getDateFor(topic)
+        }
+
+        for (i in data.indices)
+            assertEquals(
+                "Written and loaded data must be the same",
+                data[i].date,
+                dates[i]
+            )
     }
 
     private fun writeData() {
@@ -37,9 +54,6 @@ class CacheDataEntityTest {
     }
 
     private companion object Data {
-
-        val TOPICS: Array<String> =
-            DatabaseProvider.context.resources.getStringArray(R.array.topics)
 
         @JvmStatic
         lateinit var dao: CacheDataDao
