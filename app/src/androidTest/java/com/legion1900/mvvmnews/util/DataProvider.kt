@@ -1,9 +1,10 @@
-package com.legion1900.mvvmnews
+package com.legion1900.mvvmnews.util
 
+import com.legion1900.mvvmnews.R
 import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
 
 object DataProvider {
-    val TOPICS = DatabaseProvider.context.resources.getStringArray(R.array.topics)
+    val TOPICS: Array<String> = DatabaseProvider.context.resources.getStringArray(R.array.topics)
 
     private const val AUTHOR = "Author"
     private const val TITLE = "Title"
@@ -27,5 +28,12 @@ object DataProvider {
     }
 
     private fun buildArticle(topic: String?) =
-        ArticleEntity(AUTHOR, TITLE, PUB_AT, SOURCE, URL, DESC, topic)
+        ArticleEntity(
+            AUTHOR,
+            TITLE,
+            PUB_AT,
+            SOURCE,
+            URL,
+            DESC, topic
+        )
 }

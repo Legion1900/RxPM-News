@@ -1,4 +1,4 @@
-package com.legion1900.mvvmnews
+package com.legion1900.mvvmnews.util
 
 import androidx.room.Room
 import androidx.test.platform.app.InstrumentationRegistry

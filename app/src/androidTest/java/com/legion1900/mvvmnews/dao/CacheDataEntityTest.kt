@@ -1,7 +1,9 @@
-package com.legion1900.mvvmnews
+package com.legion1900.mvvmnews.dao
 
+import com.legion1900.mvvmnews.R
 import com.legion1900.mvvmnews.models.room.dao.CacheDataDao
 import com.legion1900.mvvmnews.models.room.entity.CacheDataEntity
+import com.legion1900.mvvmnews.util.DatabaseProvider
 import org.junit.BeforeClass
 import org.junit.Test
 import java.util.*

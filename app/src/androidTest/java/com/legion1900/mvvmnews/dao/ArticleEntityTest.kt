@@ -1,9 +1,11 @@
-package com.legion1900.mvvmnews
+package com.legion1900.mvvmnews.dao
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.legion1900.mvvmnews.models.room.dao.ArticleDao
 import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
+import com.legion1900.mvvmnews.util.DataProvider
+import com.legion1900.mvvmnews.util.DatabaseProvider
 import org.junit.After
 import org.junit.BeforeClass
 import org.junit.Test
