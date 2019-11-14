@@ -1,11 +1,11 @@
 package com.legion1900.mvvmnews.dao
 
-import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.legion1900.mvvmnews.models.room.dao.ArticleDao
 import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
 import com.legion1900.mvvmnews.util.DataProvider
 import com.legion1900.mvvmnews.util.DatabaseProvider
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.BeforeClass
 import org.junit.Test
@@ -22,15 +22,17 @@ class ArticleEntityTest {
     @Test
     fun insert_nullTopic_test() {
         dao.insert(*nullTopicArticles.toTypedArray())
-
-        Log.d("insert_test", "null topic articles: ${dao.getAllArticles()}")
+        val articles = dao.getAllArticles()
+        assertArticles(nullTopicArticles, articles, "id", "topic")
     }
 
     @Test
     fun insert_normalArticles_test() {
         dao.insert(*defaultArticles.toTypedArray())
-
-        Log.d("insert_test", "default articles: ${dao.getAllArticles()}")
+        val real = dao.getAllArticles().groupBy { it.topic }
+        val expected = defaultArticles.groupBy { it.topic }
+        for ((topic, articles) in expected)
+            assertArticles(articles, real.getValue(topic), "id")
     }
 
     @Test
@@ -40,7 +42,21 @@ class ArticleEntityTest {
         for (topic in DataProvider.TOPICS)
             articles += dao.getArticlesFor(topic)
 
-        Log.d("select_test", "get for test: $articles")
+        val real = articles.groupBy { it.topic }
+        val expected = defaultArticles.groupBy { it.topic }
+        for (topic in DataProvider.TOPICS) {
+            assertArticles(expected.getValue(topic), real.getValue(topic), "id")
+        }
+    }
+
+    private fun assertArticles(
+        expected: List<ArticleEntity>,
+        real: List<ArticleEntity>,
+        vararg ignoreFields: String
+    ) {
+        for (i in expected.indices)
+            assertThat(expected[i])
+                .isEqualToIgnoringGivenFields(real[i], *ignoreFields)
     }
 
     companion object Data {
