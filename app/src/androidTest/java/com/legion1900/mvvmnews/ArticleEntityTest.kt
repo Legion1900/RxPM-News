@@ -1,14 +1,10 @@
 package com.legion1900.mvvmnews
 
-import androidx.room.Room
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.legion1900.mvvmnews.models.room.dao.ArticleDao
-import com.legion1900.mvvmnews.models.room.database.CacheDatabase
 import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
-import com.legion1900.mvvmnews.utils.toIntArray
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,45 +18,47 @@ class ArticleEntityTest {
     }
 
     @Test
-    fun insert_test() {
-        populateTable()
+    fun insert_nullTopic_test() {
+        dao.insert(*nullTopicArticles.toTypedArray())
+
+        Log.d("insert_test", "null topic articles: ${dao.getAllArticles()}")
+    }
+
+    @Test
+    fun insert_normalArticles_test() {
+        dao.insert(*defaultArticles.toTypedArray())
+
+        Log.d("insert_test", "default articles: ${dao.getAllArticles()}")
     }
 
     @Test
     fun getArticlesFor_test() {
-        populateTable()
-        val ids = ARTICLE_RANGE.toIntArray()
-        val articles = dao.getArticlesFor(ids)
-        assertEquals("Lists should be the same", Data.articles, articles)
+        dao.insert(*defaultArticles.toTypedArray())
+        val articles = mutableListOf<ArticleEntity>()
+        for (topic in DataProvider.TOPICS)
+            articles += dao.getArticlesFor(topic)
+
+        Log.d("select_test", "get for test: $articles")
     }
 
-    private fun populateTable() {
-        dao.insert(*articles.toTypedArray())
-    }
+    companion object Data {
 
-    private companion object Data {
-
-        val ARTICLE_RANGE = 1..20
+        private const val ROW_NUM = 20
 
         @JvmStatic
         lateinit var dao: ArticleDao
 
-        @JvmStatic
-        private val articles = mutableListOf<ArticleEntity>()
+        /*
+        * Articles with null topic.
+        * */
+        private val nullTopicArticles: List<ArticleEntity> = DataProvider.buildArticles(ROW_NUM)
 
-        @BeforeClass
-        @JvmStatic
-        fun onDataSetup() {
-            val author = "Author"
-            val title = "Title"
-            val pubAt = "01-01-2020"
-            val source = "Source"
-            val url = "https://example.com"
-            val desc = "Foo Bar"
-            for (id in 1..20) {
-                articles += ArticleEntity(id, author, title, pubAt, source, url, desc)
-            }
-        }
+        /*
+        * Articles for default topics;
+        * list contains 20 articles for each topic.
+        * */
+        private val defaultArticles: List<ArticleEntity> =
+            DataProvider.buildDefaultArticles(ROW_NUM)
 
         @BeforeClass
         @JvmStatic

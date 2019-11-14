@@ -9,7 +9,11 @@ import com.legion1900.mvvmnews.models.room.dao.CacheDataDao
 import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
 import com.legion1900.mvvmnews.models.room.entity.CacheDataEntity
 
-@Database(entities = [ArticleEntity::class, CacheDataEntity::class], version = 1)
+@Database(
+    entities = [ArticleEntity::class, CacheDataEntity::class],
+    version = 1,
+    exportSchema = false
+)
 @TypeConverters(Converter::class)
 abstract class CacheDatabase : RoomDatabase() {
     abstract fun articleDao(): ArticleDao

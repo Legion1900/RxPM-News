@@ -21,8 +21,9 @@ class NewsCache(appContext: Context) : CacheRepository {
         dao.insert(*articles.toTypedArray())
     }
 
-    override fun readArticles(ids: IntRange): List<ArticleEntity> =
-        dao.getArticlesFor(ids.toIntArray())
+    override fun readArticles(ids: IntRange): List<ArticleEntity> {
+        TODO("Change interface")
+    }
 
     override fun clearCache() {
         dao.clear()

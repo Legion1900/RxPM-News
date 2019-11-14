@@ -11,8 +11,11 @@ interface CacheDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun update(data: CacheDataEntity)
 
-    @Query("SELECT * FROM CacheData WHERE topic = :topic LIMIT 1")
+@Query("SELECT * FROM CacheData WHERE topic = :topic LIMIT 1")
     fun getDataFor(topic: String): CacheDataEntity
+
+    @Query("SELECT * FROM CacheData")
+    fun getAllData(): List<CacheDataEntity>
 
     @Query("DELETE FROM CacheData")
     fun clear()
