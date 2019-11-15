@@ -1,17 +1,17 @@
 package com.legion1900.mvvmnews.models.repository.impl
 
-import com.legion1900.mvvmnews.models.repository.abs.CacheModel
+import com.legion1900.mvvmnews.models.repository.abs.CacheValidatorModel
 import com.legion1900.mvvmnews.models.repository.impl.network.AsyncLoader
 import com.legion1900.mvvmnews.models.repository.impl.network.NewsService
 import com.legion1900.mvvmnews.utils.TimeUtils
 import java.util.*
 
-class Cache(
+class CacheValidator(
     override val cacheRepo: CacheRepo,
     val onStart: () -> Unit,
     onFinished: () -> Unit,
     onFailure: () -> Unit
-) : CacheModel {
+) : CacheValidatorModel {
 
     private lateinit var topic: String
     private lateinit var date: Date

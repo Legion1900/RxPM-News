@@ -10,7 +10,7 @@ import org.junit.Test
 import java.util.*
 import kotlin.random.Random
 
-class CacheDataDaoTest {
+class CacheValidatorDataDaoTest {
 
     @Test
     fun update_test() {

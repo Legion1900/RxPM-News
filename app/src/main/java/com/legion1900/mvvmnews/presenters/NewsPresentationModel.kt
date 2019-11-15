@@ -1,45 +1,60 @@
 package com.legion1900.mvvmnews.presenters
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.*
 import com.legion1900.mvvmnews.models.data.Article
-import com.legion1900.mvvmnews.models.repository.impl.NewsRepo
+import com.legion1900.mvvmnews.models.repository.impl.CacheRepo
+import com.legion1900.mvvmnews.models.repository.impl.CacheValidator
 
-class NewsPresentationModel : ViewModel(),
+class NewsPresentationModel(application: Application) : AndroidViewModel(application),
     PresentationModel {
+    override fun articleOnPosition(i: Int) {
+        return articles.value!![i]
+    }
 
-    val news: LiveData<List<Article>>
-    val isLoading: LiveData<Boolean>
-    val isError: LiveData<Boolean>
+    private lateinit var articleObserver: Observer<List<Article>>
+    private lateinit var lifecycleOwner: LifecycleOwner
+    private var topic: String? = null
 
-    private val mNews = MutableLiveData<List<Article>>()
-    private val mIsLoading = MutableLiveData<Boolean>()
-    private val mIsError = MutableLiveData<Boolean>()
+    private var articles: LiveData<List<Article>> = MutableLiveData()
+    private val isLoading = MutableLiveData<Boolean>()
+    private val isError = MutableLiveData<Boolean>()
 
-    private val repo = NewsRepo(
-        onStartCallback = {
-            mIsError.value = false
-            mIsLoading.value = true
+    private val cache = CacheRepo(application)
+    private val cacheValidator = CacheValidator(
+        cache,
+        onStart = {
+            isError.value = false
+            isLoading.value = true
         },
-        provideNews = {
-            mIsLoading.value = false
-            // TODO: temporary solution, implement DB observing
-            mNews.value = it.articles
+        onFinished = {
+            isLoading.value = false
         },
-        onFailureCallback = {
-            mIsLoading.value = false
-            mIsError.value = true
+        onFailure = {
+            isLoading.value = false
+            isError.value = true
         }
     )
 
-    init {
-        news = mNews
-        isLoading = mIsLoading
-        isError = mIsError
+    override fun observeIsLoading(owner: LifecycleOwner, observer: Observer<Boolean>) {
+        isLoading.observe(owner, observer)
+    }
+
+    override fun observeIsError(owner: LifecycleOwner, observer: Observer<Boolean>) {
+        isError.observe(owner, observer)
+    }
+
+    override fun observeArticles(owner: LifecycleOwner, observer: Observer<List<Article>>) {
+        articleObserver = observer
+        lifecycleOwner = owner
+        articles.observe(owner, observer)
     }
 
     override fun updateNewsfeed(topic: String) {
-        repo.loadNews(topic)
+        cacheValidator.updateNewsFor(topic)
+        if (this.topic != topic) {
+            articles = cache.readArticles(topic)
+            articles.observe(lifecycleOwner, articleObserver)
+        }
     }
 }

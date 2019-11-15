@@ -32,7 +32,8 @@ class NewsfeedActivity : AppCompatActivity() {
     private val adapter = NewsAdapter(this, View.OnClickListener {
         val i = rv.getChildAdapterPosition(it)
         val intent = Intent(this, ArticleActivity::class.java)
-        intent.putExtra(ArticleActivity.KEY_ARTICLE, model.news.value?.get(i))
+
+        intent.putExtra(ArticleActivity.KEY_ARTICLE, )
         startActivityTransition(intent, it)
     })
 

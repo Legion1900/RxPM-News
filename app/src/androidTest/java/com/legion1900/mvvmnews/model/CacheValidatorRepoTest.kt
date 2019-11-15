@@ -20,7 +20,7 @@ import java.util.*
 import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
-class CacheRepoTest {
+class CacheValidatorRepoTest {
 
 
     val mockCallback: () -> Unit = mock()

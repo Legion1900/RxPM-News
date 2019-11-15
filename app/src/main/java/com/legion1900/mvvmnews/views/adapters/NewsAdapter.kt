@@ -36,6 +36,10 @@ class NewsAdapter(private val context: Context, private val listener: View.OnCli
         notifyDataSetChanged()
     }
 
+    fun articleOnPosition(i: Int): Article {
+        return dataSet[i]
+    }
+
     class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val author: TextView = itemView.findViewById(R.id.tv_author)
         val title: TextView = itemView.findViewById(R.id.tv_title)
