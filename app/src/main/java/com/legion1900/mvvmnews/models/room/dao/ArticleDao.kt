@@ -1,5 +1,6 @@
 package com.legion1900.mvvmnews.models.room.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -12,10 +13,10 @@ interface ArticleDao {
     fun insert(vararg articles: ArticleEntity)
 
     @Query("SELECT article FROM Article")
-    fun getAllArticles(): List<Article>
+    fun getAllArticles(): LiveData<List<Article>>
 
     @Query("SELECT article FROM Article WHERE topic IN (:topic)")
-    fun getArticlesFor(topic: String): List<Article>
+    fun getArticlesFor(topic: String): LiveData<List<Article>>
 
     @Query("DELETE FROM Article")
     fun clear()
