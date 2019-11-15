@@ -21,6 +21,6 @@ abstract class CacheDatabase : RoomDatabase() {
     abstract fun cacheDataDao(): CacheDataDao
 
     companion object {
-        const val DB_NAME = "NewsCache"
+        const val DB_NAME = "CacheRepo"
     }
 }

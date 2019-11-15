@@ -7,7 +7,7 @@ import com.legion1900.mvvmnews.models.repository.impl.network.AsyncExecutor
 import com.legion1900.mvvmnews.utils.TimeUtils
 import java.util.*
 
-class CachingNewsRepo(
+class NewsRepo(
     override val onStartCallback: () -> Unit,
     val provideNews: (Response) -> Unit,
     override val onFailureCallback: () -> Unit

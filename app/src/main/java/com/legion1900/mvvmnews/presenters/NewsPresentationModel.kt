@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.legion1900.mvvmnews.models.data.Article
-import com.legion1900.mvvmnews.models.repository.impl.CachingNewsRepo
+import com.legion1900.mvvmnews.models.repository.impl.NewsRepo
 
 class NewsPresentationModel : ViewModel(),
     PresentationModel {
@@ -17,7 +17,7 @@ class NewsPresentationModel : ViewModel(),
     private val mIsLoading = MutableLiveData<Boolean>()
     private val mIsError = MutableLiveData<Boolean>()
 
-    private val repo = CachingNewsRepo(
+    private val repo = NewsRepo(
         onStartCallback = {
             mIsError.value = false
             mIsLoading.value = true

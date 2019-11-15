@@ -9,7 +9,7 @@ import com.legion1900.mvvmnews.models.room.database.CacheDatabase
 import com.legion1900.mvvmnews.models.room.entity.CacheDataEntity
 import java.util.*
 
-class NewsCache(appContext: Context) : CacheRepository {
+class CacheRepo(appContext: Context) : CacheRepository {
 
     private val db =
         Room.databaseBuilder(appContext, CacheDatabase::class.java, CacheDatabase.DB_NAME).build()
@@ -28,7 +28,8 @@ class NewsCache(appContext: Context) : CacheRepository {
         cacheDao.update(cache)
     }
 
-    override fun readArticles(topic: String): List<Article> = articleDao.getArticlesFor(topic)
+//    override fun readArticles(topic: String): List<Article> = articleDao.getArticlesFor(topic)
+    override fun readArticles(topic: String): List<Article> = TODO("change signatures")
 
     override fun lastModified(topic: String): Date = cacheDao.getDateFor(topic)
 

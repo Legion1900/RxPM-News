@@ -2,7 +2,7 @@ package com.legion1900.mvvmnews.model
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.legion1900.mvvmnews.models.data.Article
-import com.legion1900.mvvmnews.models.repository.impl.NewsCache
+import com.legion1900.mvvmnews.models.repository.impl.CacheRepo
 import com.legion1900.mvvmnews.util.DataProvider
 import com.legion1900.mvvmnews.util.DataProvider.TOPICS
 import com.legion1900.mvvmnews.util.DatabaseProvider
@@ -16,8 +16,8 @@ import java.util.*
 import kotlin.random.Random
 
 @RunWith(AndroidJUnit4::class)
-class NewsCacheTest {
-    private val newsCache = NewsCache(DatabaseProvider.context)
+class CacheRepoTest {
+    private val newsCache = CacheRepo(DatabaseProvider.context)
 
     private lateinit var date: Date
 
