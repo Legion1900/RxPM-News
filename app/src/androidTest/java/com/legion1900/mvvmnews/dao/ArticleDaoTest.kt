@@ -1,5 +1,8 @@
 package com.legion1900.mvvmnews.dao
 
+import android.util.Log
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.legion1900.mvvmnews.models.data.Article
 import com.legion1900.mvvmnews.models.room.dao.ArticleDao
@@ -8,14 +11,17 @@ import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
 import com.legion1900.mvvmnews.util.DataProvider
 import com.legion1900.mvvmnews.util.DataProvider.TOPICS
 import com.legion1900.mvvmnews.util.DatabaseProvider
+import com.legion1900.mvvmnews.util.blockingValue
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ArticleDaoTest {
+
+    @Rule
+    @JvmField
+    val rule = InstantTaskExecutorRule()
 
     @After
     fun onClearDb() {
@@ -25,8 +31,9 @@ class ArticleDaoTest {
     @Test
     fun insert_nullTopic_test() {
         articleDao.insert(*nullTopicEntities.toTypedArray())
-        val articles = articleDao.getAllArticles()
-        assertArticles(nullTopicEntities, articles, "id", "topic")
+        val articles: LiveData<List<Article>> = articleDao.getAllArticles()
+        Log.d("articles", articles.value.toString())
+        assertArticles(nullTopicEntities, articles.blockingValue, "id", "topic")
     }
 
     @Test
@@ -34,12 +41,17 @@ class ArticleDaoTest {
         val cache = DataProvider.buildDefaultCacheEntities()
         for (c in cache)
             cacheDao.update(c)
+        val articles = mutableMapOf<String, LiveData<List<Article>>>()
+        for (topic in TOPICS) {
+            articles[topic] = articleDao.getArticlesFor(topic)
+        }
+
         articleDao.insert(*defaultArticles.toTypedArray())
         val groups: Map<String?, List<ArticleEntity>> = defaultArticles.groupBy { it.topic }
         for (topic in TOPICS) {
-            val articles = articleDao.getArticlesFor(topic)
+            val real = articles.getValue(topic).blockingValue
             val expected = groups.getValue(topic)
-            assertArticles(expected, articles, "id")
+            assertArticles(expected, real, "id")
         }
     }
 
@@ -65,7 +77,8 @@ class ArticleDaoTest {
         /*
         * Articles with null topic.
         * */
-        private val nullTopicEntities: List<ArticleEntity> = DataProvider.buildArticleEntities(ROW_NUM)
+        private val nullTopicEntities: List<ArticleEntity> =
+            DataProvider.buildArticleEntities(ROW_NUM)
 
         /*
         * Articles for default topics;
@@ -80,6 +93,12 @@ class ArticleDaoTest {
             val db = DatabaseProvider.provideNewsCacheDb()
             articleDao = db.articleDao()
             cacheDao = db.cacheDataDao()
+        }
+
+        @AfterClass
+        @JvmStatic
+        fun onCleanup() {
+            cacheDao.clear()
         }
     }
 }
