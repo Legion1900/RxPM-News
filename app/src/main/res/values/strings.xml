@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Moxy News</string>
-    <string name="title_newsfeed">Moxy News</string>
-    <string name="msg_err">Connection problems has occured</string>
+    <string name="app_name">MVVM News</string>
+    <string name="title_newsfeed">MVVM News</string>
+    <string name="msg_err">Connection problems has occurred</string>
     <string name="btn_positive">Try again</string>
 
     <string name="topic_name_soft">Software</string>

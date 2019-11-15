@@ -1,6 +1,8 @@
 package com.legion1900.mvvmnews.models.repository.impl
 
 import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import androidx.room.Room
 import com.legion1900.mvvmnews.models.DataConverter
 import com.legion1900.mvvmnews.models.data.Article
@@ -28,13 +30,16 @@ class CacheRepo(appContext: Context) : CacheRepository {
         cacheDao.update(cache)
     }
 
-//    override fun readArticles(topic: String): List<Article> = articleDao.getArticlesFor(topic)
-    override fun readArticles(topic: String): List<Article> = TODO("change signatures")
+    override fun readArticles(topic: String): LiveData<List<Article>> =
+        articleDao.getArticlesFor(topic).distinctUntilChanged()
 
     override fun lastModified(topic: String): Date = cacheDao.getDateFor(topic)
 
     override fun clearCache() {
         cacheDao.clear()
     }
+
+    private fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> =
+        Transformations.distinctUntilChanged(this)
 
 }
