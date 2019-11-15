@@ -6,8 +6,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class AsyncExecutor(
-    onResponse: (com.legion1900.mvvmnews.models.data.Response?) -> Unit,
+class AsyncLoader(
+    onResponse: (com.legion1900.mvvmnews.models.data.Response) -> Unit,
     onFailure: () -> Unit
 ) {
 
@@ -29,19 +29,22 @@ class AsyncExecutor(
         override fun onFailure(
             call: Call<com.legion1900.mvvmnews.models.data.Response>,
             t: Throwable
-        ) {
-            onFailure()
-        }
+        ) = onFailure()
 
         override fun onResponse(
             call: Call<com.legion1900.mvvmnews.models.data.Response>,
             response: Response<com.legion1900.mvvmnews.models.data.Response>
         ) {
-            onResponse(response.body())
+            /*
+            * Sometimes API returns null response and this is why this check exists.
+            * */
+            response.body()?.let{
+                onResponse(it)
+            } ?: run { onFailure() }
         }
     }
 
-    fun execAsync(queryArgs: Map<String, String>) {
+    fun loadAsync(queryArgs: Map<String, String>) {
         val call = service.queryNews(queryArgs)
         call.enqueue(callback)
     }

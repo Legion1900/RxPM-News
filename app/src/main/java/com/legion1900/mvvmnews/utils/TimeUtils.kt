@@ -11,7 +11,7 @@ class TimeUtils {
             return dateFormat.format(date)
         }
 
-        fun getCurrentDate() = Calendar.getInstance().time
+        fun getCurrentDate(): Date = Calendar.getInstance().time
     }
 
     private val tmp1 = Calendar.getInstance()
