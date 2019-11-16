@@ -1,10 +1,10 @@
 package com.legion1900.mvvmnews.util
 
 import com.legion1900.mvvmnews.R
-import com.legion1900.mvvmnews.models.DataConverter
 import com.legion1900.mvvmnews.models.data.Article
 import com.legion1900.mvvmnews.models.room.entity.ArticleEntity
 import com.legion1900.mvvmnews.models.room.entity.CacheDataEntity
+import com.legion1900.mvvmnews.utils.articlesToEntities
 import java.util.*
 import kotlin.random.Random
 
@@ -31,14 +31,14 @@ object DataProvider {
         val articles = mutableListOf<Article>()
         for (i in 0 until num)
             articles += buildArticle()
-        return DataConverter.articlesToEntities(articles)
+        return articlesToEntities(articles)
     }
 
     fun buildDefaultArticleEntities(num: Int): List<ArticleEntity> {
         val entities = mutableListOf<ArticleEntity>()
         for (topic in TOPICS) {
             val articles = buildArticleList(num)
-            entities += DataConverter.articlesToEntities(articles, topic)
+            entities += articlesToEntities(articles, topic)
         }
         return entities
     }

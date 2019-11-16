@@ -2,11 +2,11 @@ package com.legion1900.mvvmnews.models.repository.impl
 
 import android.content.Context
 import androidx.room.Room
-import com.legion1900.mvvmnews.models.DataConverter
 import com.legion1900.mvvmnews.models.data.Article
 import com.legion1900.mvvmnews.models.repository.abs.CacheRepository
 import com.legion1900.mvvmnews.models.room.database.CacheDatabase
 import com.legion1900.mvvmnews.models.room.entity.CacheDataEntity
+import com.legion1900.mvvmnews.utils.articlesToEntities
 import java.util.*
 
 class NewsCache(appContext: Context) : CacheRepository {
@@ -18,7 +18,7 @@ class NewsCache(appContext: Context) : CacheRepository {
 
     override fun writeArticles(topic: String, date: Date, articles: List<Article>) {
         updateCacheData(topic, date)
-        val entities = DataConverter.articlesToEntities(articles, topic)
+        val entities = articlesToEntities(articles, topic)
         articleDao.insert(*entities.toTypedArray())
     }
 
