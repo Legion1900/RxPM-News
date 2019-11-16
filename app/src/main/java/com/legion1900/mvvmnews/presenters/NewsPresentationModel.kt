@@ -1,12 +1,14 @@
 package com.legion1900.mvvmnews.presenters
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.legion1900.mvvmnews.models.data.Article
-import com.legion1900.mvvmnews.models.repository.impl.CachingNewsRepo
+import com.legion1900.mvvmnews.models.repository.impl.NewsCache
+import com.legion1900.mvvmnews.models.repository.impl.NewsRepo
 
-class NewsPresentationModel : ViewModel(),
+class NewsPresentationModel(application: Application) : AndroidViewModel(application),
     PresentationModel {
 
     val news: LiveData<List<Article>>
@@ -17,15 +19,16 @@ class NewsPresentationModel : ViewModel(),
     private val mIsLoading = MutableLiveData<Boolean>()
     private val mIsError = MutableLiveData<Boolean>()
 
-    private val repo = CachingNewsRepo(
+    private val cache = NewsCache(application)
+    private val repo = NewsRepo(
+        cache,
         onStartCallback = {
-            mIsError.value = false
-            mIsLoading.value = true
+            mIsError.postValue(false)
+            mIsLoading.postValue(true)
         },
-        provideNews = {
-            mIsLoading.value = false
-            // TODO: temporary solution, implement DB observing
-            mNews.value = it.articles
+        onLoadedCallback = {
+            mIsLoading.postValue(false)
+            mNews.postValue(it)
         },
         onFailureCallback = {
             mIsLoading.value = false
@@ -41,5 +44,10 @@ class NewsPresentationModel : ViewModel(),
 
     override fun updateNewsfeed(topic: String) {
         repo.loadNews(topic)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        repo.clearCache()
     }
 }

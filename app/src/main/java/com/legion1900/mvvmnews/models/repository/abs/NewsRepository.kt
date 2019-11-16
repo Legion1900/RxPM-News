@@ -10,4 +10,5 @@ interface NewsRepository {
     * Asks to update cached in 'news' property articles.
     * */
     fun loadNews(topic: String)
+    fun clearCache()
 }

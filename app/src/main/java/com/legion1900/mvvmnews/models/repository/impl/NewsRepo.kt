@@ -1,14 +1,16 @@
 package com.legion1900.mvvmnews.models.repository.impl
 
+import android.util.Log
 import com.legion1900.mvvmnews.models.data.Article
 import com.legion1900.mvvmnews.models.repository.abs.NewsRepository
 import com.legion1900.mvvmnews.models.repository.impl.network.NewsLoader
 import com.legion1900.mvvmnews.models.repository.impl.network.NewsService
 import com.legion1900.mvvmnews.utils.TimeUtils
 import java.util.*
+import java.util.concurrent.Executors
 
 class NewsRepo(
-    val newsCache: NewsCache,
+    private val newsCache: NewsCache,
     override val onStartCallback: () -> Unit,
     override val onLoadedCallback: (List<Article>) -> Unit,
     override val onFailureCallback: () -> Unit
@@ -26,17 +28,40 @@ class NewsRepo(
     private val loader = NewsLoader(
         onResponse = {
             // At this point currentTopic must be set to real value.
-            newsCache.writeArticles(currentTopic!!, date, it)
+            updateCache(it)
+            readCache()
         },
         onFailure = onFailureCallback
     )
 
+    private val executor = Executors.newSingleThreadExecutor()
+
     override fun loadNews(topic: String) {
         currentTopic = topic
-        if (isOutdated())
-            startLoading()
-        val articles = newsCache.readArticles(topic)
-        onLoadedCallback(articles)
+        executor.submit{
+            onStartCallback()
+            if (isOutdated())
+                startLoading()
+            else
+                readCache()
+        }
+    }
+
+    override fun clearCache() {
+        executor.submit { newsCache.clearCache()
+        Log.d("Test", "Cache cleared!")
+        }
+    }
+
+    private fun updateCache(articles: List<Article>) {
+        executor.submit { newsCache.writeArticles(currentTopic!!, date, articles) }
+    }
+
+    private fun readCache() {
+        executor.submit {
+            val articles = newsCache.readArticles(currentTopic!!)
+            onLoadedCallback(articles)
+        }
     }
 
     private fun isOutdated(): Boolean {
