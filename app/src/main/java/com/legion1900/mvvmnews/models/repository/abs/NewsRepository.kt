@@ -1,13 +1,10 @@
 package com.legion1900.mvvmnews.models.repository.abs
 
-import com.legion1900.mvvmnews.models.data.Response
+import com.legion1900.mvvmnews.models.data.Article
 
 interface NewsRepository {
-    /*
-    * Async callbacks.
-    * */
     val onStartCallback: () -> Unit
-    val onLoadedCallback: (Response) -> Unit
+    val onLoadedCallback: (List<Article>) -> Unit
     val onFailureCallback: () -> Unit
     /*
     * Asks to update cached in 'news' property articles.

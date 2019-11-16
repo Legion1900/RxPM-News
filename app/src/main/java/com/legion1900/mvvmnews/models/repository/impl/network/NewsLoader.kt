@@ -1,15 +1,13 @@
 package com.legion1900.mvvmnews.models.repository.impl.network
 
+import com.legion1900.mvvmnews.models.data.Article
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class NewsLoader(
-    onResponse: (com.legion1900.mvvmnews.models.data.Response) -> Unit,
-    onFailure: () -> Unit
-) {
+class NewsLoader(onResponse: (List<Article>) -> Unit, onFailure: () -> Unit) {
 
     companion object QueryBuilder {
         private const val BASE_URL = "https://newsapi.org"
@@ -38,7 +36,7 @@ class NewsLoader(
             response: Response<com.legion1900.mvvmnews.models.data.Response>
         ) {
             val body = response.body()
-            body?.let { onResponse(it) } ?: onFailure()
+            body?.let { onResponse(it.articles) } ?: onFailure()
         }
     }
 
