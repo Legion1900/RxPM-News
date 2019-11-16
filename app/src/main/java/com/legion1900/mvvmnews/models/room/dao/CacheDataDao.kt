@@ -9,11 +9,17 @@ interface CacheDataDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun update(data: CacheDataEntity)
 
+    /*
+    * Returns null if executed on empty table.
+    * */
     @Query("SELECT * FROM CacheData WHERE topic = :topic LIMIT 1")
-    fun getCacheFor(topic: String): CacheDataEntity
+    fun getCacheFor(topic: String): CacheDataEntity?
 
+    /*
+    * Returns null if executed on empty table.
+    * */
     @Query("SELECT date FROM CacheData WHERE topic = :topic LIMIT 1")
-    fun getDateFor(topic: String): Date
+    fun getDateFor(topic: String): Date?
 
     @Query("SELECT * FROM CacheData")
     fun getAllData(): List<CacheDataEntity>

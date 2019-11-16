@@ -4,7 +4,9 @@ import com.legion1900.mvvmnews.models.room.dao.CacheDataDao
 import com.legion1900.mvvmnews.models.room.entity.CacheDataEntity
 import com.legion1900.mvvmnews.util.DataProvider.TOPICS
 import com.legion1900.mvvmnews.util.DatabaseProvider
+import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import java.util.*
@@ -12,17 +14,22 @@ import kotlin.random.Random
 
 class CacheDataDaoTest {
 
-    @Test
-    fun update_test() {
-        writeData()
+    @Before
+    fun onPopulateTable() {
+        for (cache in data)
+            dao.update(cache)
+    }
+
+    @After
+    fun onClearTable() {
+        dao.clear()
     }
 
     @Test
     fun getCacheFor_test() {
-        writeData()
         val out = mutableListOf<CacheDataEntity>()
         for (topic in TOPICS) {
-            out += dao.getCacheFor(topic)
+            out += dao.getCacheFor(topic)!!
         }
 
         assertEquals(
@@ -34,10 +41,9 @@ class CacheDataDaoTest {
 
     @Test
     fun getDateFor_test() {
-        writeData()
         val dates = mutableListOf<Date>()
         for (topic in TOPICS) {
-            dates += dao.getDateFor(topic)
+            dates += dao.getDateFor(topic)!!
         }
 
         for (i in data.indices)
@@ -48,13 +54,7 @@ class CacheDataDaoTest {
             )
     }
 
-    private fun writeData() {
-        for (cache in data)
-            dao.update(cache)
-    }
-
     private companion object Data {
-
         @JvmStatic
         lateinit var dao: CacheDataDao
 

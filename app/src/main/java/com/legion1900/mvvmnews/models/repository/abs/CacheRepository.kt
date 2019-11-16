@@ -11,7 +11,7 @@ interface CacheRepository {
     /*
     * Date when specified topic was updated last time.
     * */
-    fun lastModified(topic: String): Date
+    fun lastModified(topic: String): Date?
 
     fun clearCache()
 }

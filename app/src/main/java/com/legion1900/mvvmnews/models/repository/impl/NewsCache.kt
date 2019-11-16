@@ -30,7 +30,7 @@ class NewsCache(appContext: Context) : CacheRepository {
 
     override fun readArticles(topic: String): List<Article> = articleDao.getArticlesFor(topic)
 
-    override fun lastModified(topic: String): Date = cacheDao.getDateFor(topic)
+    override fun lastModified(topic: String): Date? = cacheDao.getDateFor(topic)
 
     override fun clearCache() {
         cacheDao.clear()
