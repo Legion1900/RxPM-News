@@ -3,7 +3,7 @@ package com.legion1900.mvvmnews.models.repository.impl
 import com.legion1900.mvvmnews.models.repository.impl.network.NewsService
 import com.legion1900.mvvmnews.models.data.Response
 import com.legion1900.mvvmnews.models.repository.abs.NewsRepository
-import com.legion1900.mvvmnews.models.repository.impl.network.AsyncExecutor
+import com.legion1900.mvvmnews.models.repository.impl.network.NewsLoader
 import com.legion1900.mvvmnews.utils.TimeUtils
 import java.util.*
 
@@ -20,18 +20,16 @@ class CachingNewsRepo(
         const val TIMEOUT = 60_000
     }
 
-    override val onLoadedCallback: (Response?) -> Unit = { response ->
+    override val onLoadedCallback: (Response) -> Unit = { response ->
         this.response = response
-        response?.let{
-            provideNews(it)
-            topic = requestTopic
-            timestamp = requestDate
-        } ?: onFailureCallback()
+        topic = requestTopic
+        timestamp = requestDate
+        provideNews(response)
     }
 
     private val timeUtils = TimeUtils()
 
-    private val executor = AsyncExecutor(onLoadedCallback, onFailureCallback)
+    private val executor = NewsLoader(onLoadedCallback, onFailureCallback)
 
     private lateinit var requestTopic: String
     private lateinit var requestDate: Date
@@ -61,6 +59,6 @@ class CachingNewsRepo(
     private fun startLoading(topic: String, date: Date) {
         onStartCallback()
         val query = NewsService.buildQuery(topic, date)
-        executor.execAsync(query)
+        executor.loadAsync(query)
     }
 }
