@@ -1,7 +1,7 @@
 package com.legion1900.mvvmnews.models.repository.impl
 
-import android.util.Log
 import com.legion1900.mvvmnews.models.data.Article
+import com.legion1900.mvvmnews.models.repository.abs.CacheRepository
 import com.legion1900.mvvmnews.models.repository.abs.NewsRepository
 import com.legion1900.mvvmnews.models.repository.impl.network.NewsLoader
 import com.legion1900.mvvmnews.models.repository.impl.network.NewsService
@@ -10,7 +10,7 @@ import java.util.*
 import java.util.concurrent.Executors
 
 class NewsRepo(
-    private val newsCache: NewsCache,
+    private val newsCache: CacheRepository,
     override val onStartCallback: () -> Unit,
     override val onLoadedCallback: (List<Article>) -> Unit,
     override val onFailureCallback: () -> Unit
@@ -38,7 +38,7 @@ class NewsRepo(
 
     override fun loadNews(topic: String) {
         currentTopic = topic
-        executor.submit{
+        executor.submit {
             onStartCallback()
             if (isOutdated())
                 startLoading()
@@ -48,9 +48,7 @@ class NewsRepo(
     }
 
     override fun clearCache() {
-        executor.submit { newsCache.clearCache()
-        Log.d("Test", "Cache cleared!")
-        }
+        executor.submit { newsCache.clearCache() }
     }
 
     private fun updateCache(articles: List<Article>) {
