@@ -1,4 +1,4 @@
-package com.legion1900.mvvmnews.views.handlers
+package com.legion1900.mvvmnews.views.listeners
 
 import android.view.View
 import android.widget.AdapterView

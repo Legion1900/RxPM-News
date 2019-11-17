@@ -1,56 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".views.NewsfeedActivity">
+<layout>
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <data>
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            app:title="@string/title_newsfeed"
-            app:titleTextColor="@android:color/white"
-            android:layout_height="?attr/actionBarSize" />
+        <variable
+            name="viewModel"
+            type="com.legion1900.mvvmnews.presenters.NewsPresentationModel" />
+    </data>
 
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <LinearLayout
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        tools:context=".views.NewsfeedActivity">
 
-        <Spinner
-            android:id="@+id/spinner_topics"
-            android:layout_marginStart="@dimen/middle"
-            android:layout_marginEnd="@dimen/middle"
-            android:layout_marginBottom="@dimen/small"
-            android:paddingTop="@dimen/small"
-            android:paddingBottom="@dimen/small"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/topics"/>
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_refresh"
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_news"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:paddingStart="@dimen/middle"
-                android:paddingEnd="@dimen/middle"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/title_newsfeed"
+                app:titleTextColor="@android:color/white" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <Spinner
+                android:id="@+id/spinner_topics"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                android:layout_marginStart="@dimen/middle"
+                android:layout_marginEnd="@dimen/middle"
+                android:layout_marginBottom="@dimen/small"
+                android:entries="@array/topics"
+                android:paddingTop="@dimen/small"
+                android:paddingBottom="@dimen/small" />
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipe_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_news"
+                    app:data="@{viewModel.news}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/middle"
+                    android:paddingEnd="@dimen/middle"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>
