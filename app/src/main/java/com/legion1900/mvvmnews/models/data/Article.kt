@@ -39,6 +39,7 @@ data class Article(
         * As article`s title, source name and text goes into string delimiter must be really unique.
         * */
         private const val DELIMITER = "~_~"
+        private const val NULL = "null"
 
         override fun createFromParcel(parcel: Parcel): Article {
             return Article(parcel)
@@ -54,7 +55,11 @@ data class Article(
 
         fun fromString(article: String): Article {
             // a ~ args
-            val a = article.split(DELIMITER)
+            val a = mutableListOf<String?>()
+            for (field in article.split(DELIMITER)) {
+                if (field == NULL) a.add(null)
+                else a += field
+            }
             return Article(a[0], a[1], a[2], a[3], a[4], a[5])
         }
     }
